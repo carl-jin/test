@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "sourceMap": false,
+    "moduleResolution": "Node",
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "strict": false,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@renderer/*": ["./src/*"],
+      "@main/*": ["../main/src/*"],
+      "@mainIpc": ["../main/src/IPC/index.ts"],
+      "@mainTypes": ["../main/src/sharedTypes.ts"],
+      "#preload": ["../preload/src/index.ts"]
+    },
+    "lib": ["ESNext", "dom", "dom.iterable"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts", "../main"]
+}
