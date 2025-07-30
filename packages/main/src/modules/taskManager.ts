@@ -4,6 +4,8 @@ import { AccountStatusEnum } from '@main/db/types';
 import { Account } from '@main/db/entity';
 import { sample, uniqBy, isEqual } from 'lodash';
 import { BrowserSession, loginWithGoogle } from './LoginWIthGoogle';
+import { killChromeBrowserByWindowname } from '@main/helpers/browserKillHelper';
+import { bringToFront } from '@main/helpers/bringToFrontHelper';
 
 let oldUpdate: Array<{
   id: number;
@@ -116,6 +118,9 @@ export class TaskManager {
       for (const accountInfo of accountsInfo) {
         if (accountInfo.status === AccountStatusEnum.RUNNING) {
           accountInfo.browserSession?.closeBrowser();
+          accountInfo.browserSession?.process.kill('SIGKILL');
+          accountInfo.browserSession?.process.kill('SIGTERM');
+          killChromeBrowserByWindowname(btoa(accountInfo.account.email).replace(/=/g, ''));
           this.accountMap.delete(accountInfo.account.id);
           db.Account.updateAccount(accountInfo.account.id, {
             status: AccountStatusEnum.ERROR,
@@ -130,6 +135,8 @@ export class TaskManager {
         }
 
         if (isCompalateCleanUp) {
+          console.log('关闭浏览器')
+          killChromeBrowserByWindowname(btoa(accountInfo.account.email).replace(/=/g, ''));
           accountInfo.browserSession?.closeBrowser();
           accountInfo.browserSession?.process.kill('SIGTERM');
         }
@@ -369,7 +376,7 @@ export class TaskManager {
     const accountInfo = this.accountMap.get(id);
     if (accountInfo) {
       try {
-        accountInfo.browserSession?.page.bringToFront();
+        accountInfo.browserSession?.page && bringToFront(accountInfo.browserSession?.page, accountInfo.account.email);
       } catch (error) {
         renderLog(`账号 ${accountInfo.account.email} 浏览器窗口无法聚焦，可能窗口已关闭`, 'error');
       }

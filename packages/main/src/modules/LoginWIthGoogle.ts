@@ -11,6 +11,7 @@ import fs from 'fs/promises';
 import getPort from 'get-port';
 import { db } from '@main/db/DBServer';
 import { app } from 'electron';
+import { bringToFront } from '@main/helpers/bringToFrontHelper';
 
 // 账户信息接口
 export interface AccountInfo {
@@ -178,6 +179,7 @@ function launchBrowserProcess(
     `--disable-prompt-on-repost`,
     `--window-size=1080,720`,
     `--lang=en-US`,
+    `--window-name=${btoa(email).replace(/=/g, '')}`,
   ];
 
   const executablePath = configs.executablePath;
@@ -280,7 +282,7 @@ async function performGoogleLogin(
 
   // 处理手动验证等待的通用函数
   async function waitForManualVerification(urlPattern: string) {
-    await page.bringToFront();
+    await bringToFront(page, loginEmail);
     await addHighlightBorder(page);
 
     let isPassed = false;
@@ -418,6 +420,7 @@ async function performGoogleLogin(
 
     // 选择其他验证方式（这里可以选择使用 二步验证）
     if (url.includes('challenge/selection')) {
+      await sleep(2);
       const isTwoStepOptionExist = await isElementExist(
         'get-a-verification-code-from-google-authenticator',
       );
@@ -548,7 +551,7 @@ export async function loginWithGoogle(
         if (closeMenuall) {
           return;
         }
-        browserSession.page.bringToFront();
+        bringToFront(browserSession.page, accountInfo.email);
         callbacks?.onWaitingForActions?.();
 
         browserSession.page.on('close', () => {

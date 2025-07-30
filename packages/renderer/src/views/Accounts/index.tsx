@@ -240,7 +240,7 @@ export default function Accounts() {
         rowKey="id"
         pagination={false}
         scroll={{
-          y: 600, // 固定表格高度
+          y: 540, // 固定表格高度
           x: 1000, // 水平滚动
         }}
         virtual // 启用虚拟滚动
