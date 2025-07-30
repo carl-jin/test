@@ -10,7 +10,7 @@ const isDev = !app.isPackaged;
 function bringToFront(page:Page, email: string) {
     if(platform() === 'win32') {
         const devPath = path.join(app.getAppPath(), "buildResources","nircmdc.exe")
-        const prodPath = path.join(app.getAppPath(), "nircmdc.exe")
+        const prodPath = path.join(app.getAppPath(), "buildResources","nircmdc.exe")
         const nircmdcPath = isDev ? devPath : prodPath;
         exec(`${nircmdcPath} win activate title "${btoa(email).replace(/=/g, '')}"`);
     }

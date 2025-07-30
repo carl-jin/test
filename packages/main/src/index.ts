@@ -10,6 +10,7 @@ import { EVDInit } from 'electron-version-deployer-cli/dist/main';
 import { join } from 'node:path';
 import { writeError } from '@main/utils/errors';
 import { resetAccountsInfo } from './helpers/resetAccountsInfoHelper';
+import { evdRemoteUrl } from './const';
 
 /**
  * Prevent electron from running multiple instances.
@@ -49,8 +50,8 @@ app
   .then(() => {
     if (!import.meta.env.isDev) {
       EVDInit({
-        remoteUrl: `https://auto-login-software-main.pages.dev`,
-        logo: `file://${join(app.getAppPath(), 'packages', 'main', 'dist', 'icon.png')}`,
+        remoteUrl: evdRemoteUrl,
+        logo: `file://${join(app.getAppPath(), 'buildResources', 'icon.png')}`,
         onError(error) {
           //  记录更新检测遇到的错误
           writeError(error, 'evd');
@@ -63,7 +64,7 @@ app
 
     return DBServer.init(path.join(app.getPath('userData'), 'db.sqlite')).then(() => {
       InitIPCHandler(IPC);
-      resetAccountsInfo()
+      resetAccountsInfo();
       return restoreOrCreateWindow();
     });
   })

@@ -2,7 +2,7 @@ import { Account } from '../entity/Account.entity';
 import { DataSource, Repository, In } from 'typeorm';
 import { AccountStatusEnum } from '../types';
 import { IPC } from '@main/IPC';
-
+import { taskManager } from '@main/modules/taskManager';
 export class AccountOperator {
   Repository: Repository<Account>;
   AppDataSource: DataSource;
@@ -54,6 +54,7 @@ export class AccountOperator {
 
   async deleteAccounts(ids: number[]): Promise<void> {
     await this.Repository.delete(ids);
+    taskManager.stopTaskByAccountIds(ids);
     IPC.send('accountDataChange');
   }
 

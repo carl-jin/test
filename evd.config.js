@@ -1,18 +1,18 @@
 import { defineEVDConfig } from 'electron-version-deployer-cli';
-
+import { evdRemoteUrl } from './packages/main/src/const';
 export default defineEVDConfig({
   compileCommand: 'evd:prepare',
   changelogsPath: 'CHANGELOG.md',
   sources: {
-    folder: 'dist/mac-arm64/自动登入.app/Contents/Resources/app',
+    folder: 'dist/mac-arm64/Hedra自动登入.app/Contents/Resources/app',
     nodeModules: 'node_modules',
     codes: 'packages',
     packageJSON: 'package.json',
   },
   cloudflare: {
-    url: 'https://auto-login-software-main.pages.dev',
+    url: evdRemoteUrl,
     token: `JnVMe6WzXThRx2veoHqtqIUV-oM6Jwm-FlPQElfr`,
-    projectName: `auto-login-software-main`,
+    projectName: `evdtest`,
   },
   prebuiltConfig: {
     sqlite3: {

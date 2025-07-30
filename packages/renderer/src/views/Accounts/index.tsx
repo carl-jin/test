@@ -55,6 +55,7 @@ interface AccountData {
 export default function Accounts() {
   const [searchText, setSearchText] = useState('');
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isWaitToRun, setIsWaitToRun] = useState<boolean>(false);
 
   const { data, isLoading, mutate } = useDBSWR<'Account', 'getAllAccounts'>([
     'Account.getAllAccounts',
@@ -279,8 +280,15 @@ export default function Accounts() {
               <Button
                 icon={<PlayCircleOutlined />}
                 type="primary"
+                loading={isWaitToRun}
                 disabled={!settings?.runFlag || selectedRowKeys.length === 0}
                 onClick={() => {
+                  setIsWaitToRun(true);
+                  setTimeout(() => {
+                    setIsWaitToRun(false);
+                  }, 3000);
+
+
                   const accountIDs = selectedRowKeys.map(Number);
                   const account = data?.filter((account) => accountIDs.includes(account.id));
                   const isHaveWaitingActionsAccount = account?.some(

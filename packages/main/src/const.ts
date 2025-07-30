@@ -1,0 +1,1 @@
+export const evdRemoteUrl = 'https://auto-login-software-main.pages.dev';

@@ -11,10 +11,10 @@ module.exports = async function () {
   const { getVersion } = await import('./version/getVersion.mjs');
 
   return {
-    productName: '自动登入',
+    productName: 'Hedra自动登入',
     appId: 'com.simple-marker.autologinsoftware',
-    artifactName: '自动登入.${version}-${arch}.${ext}',
-    files: ['packages/**/dist/**', 'autoUpdateInstaller'],
+    artifactName: 'Hedra自动登入.${version}-${arch}.${ext}',
+    files: ['packages/**/dist/**', 'buildResources/**', 'autoUpdateInstaller'],
     asar: false,
     mac: {
       category: 'public.app-category.utilities',
@@ -39,7 +39,7 @@ module.exports = async function () {
       icon: 'buildResources/icon.png',
     },
     deb: {
-      artifactName: '自动登入.${version}-${arch}.${ext}',
+      artifactName: 'Hedra自动登入.${version}-${arch}.${ext}',
     },
     win: {
       target: [
@@ -52,7 +52,7 @@ module.exports = async function () {
     },
     nsis: {
       deleteAppDataOnUninstall: false,
-      artifactName: '自动登入.${version}-${arch}.${ext}',
+      artifactName: 'Hedra自动登入.${version}-${arch}.${ext}',
     },
     extraMetadata: {
       version: getVersion(),

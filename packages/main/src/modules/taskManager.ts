@@ -72,6 +72,19 @@ export class TaskManager {
     }
   }
 
+  public stopTaskByAccountIds(ids: number[]) {
+    for (const id of ids) {
+      const accountInfo = this.accountMap.get(id);
+      if (accountInfo) {
+        accountInfo.browserSession?.closeBrowser();
+        accountInfo.browserSession?.process.kill('SIGKILL');
+        accountInfo.browserSession?.process.kill('SIGTERM');
+        killChromeBrowserByWindowname(btoa(accountInfo.account.email).replace(/=/g, ''));
+        this.accountMap.delete(id);
+      }
+    }
+  }
+
   /**
    * 启用任务管理器
    */
@@ -135,7 +148,7 @@ export class TaskManager {
         }
 
         if (isCompalateCleanUp) {
-          console.log('关闭浏览器')
+          console.log('关闭浏览器');
           killChromeBrowserByWindowname(btoa(accountInfo.account.email).replace(/=/g, ''));
           accountInfo.browserSession?.closeBrowser();
           accountInfo.browserSession?.process.kill('SIGTERM');
@@ -376,7 +389,8 @@ export class TaskManager {
     const accountInfo = this.accountMap.get(id);
     if (accountInfo) {
       try {
-        accountInfo.browserSession?.page && bringToFront(accountInfo.browserSession?.page, accountInfo.account.email);
+        accountInfo.browserSession?.page &&
+          bringToFront(accountInfo.browserSession?.page, accountInfo.account.email);
       } catch (error) {
         renderLog(`账号 ${accountInfo.account.email} 浏览器窗口无法聚焦，可能窗口已关闭`, 'error');
       }
