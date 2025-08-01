@@ -3,6 +3,7 @@ import { createMemoryRouter, redirect } from 'react-router-dom';
 import { RouterNameEnum } from '../enums';
 import Settings from '@renderer/views/Settings';
 import Accounts from '@renderer/views/Accounts';
+import DownloadHistory from '@renderer/views/DownloadHistory';
 
 const router = createMemoryRouter([
   {
@@ -17,6 +18,10 @@ const router = createMemoryRouter([
   {
     path: `/${RouterNameEnum.SETTINGS}`,
     element: <Settings />,
+  },
+  {
+    path: `/${RouterNameEnum.DOWNLOAD_HISTORY}`,
+    element: <DownloadHistory />,
   },
 ]);
 

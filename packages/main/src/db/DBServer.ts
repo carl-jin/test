@@ -3,6 +3,7 @@ import { writeError } from '@main/utils/errors';
 import { formatDurationToS } from '@main/utils/utils';
 import { Account } from './entity/Account.entity';
 import { Settings } from './entity/Settings.entity';
+import { DownloadHistory } from './entity/DownloadHistory.entity';
 import { ipcMain } from 'electron';
 import { get } from 'lodash';
 import sqlite3 from 'sqlite3';
@@ -23,7 +24,7 @@ class DBServerInstance {
     this.AppDataSource = new DataSource({
       type: 'sqlite',
       database: path,
-      entities: [Account, Settings],
+      entities: [Account, Settings, DownloadHistory],
       synchronize: true,
       logging: ['error', 'warn'],
       driver: sqlite3,

@@ -35,6 +35,7 @@ export interface LoginCallbacks {
   onSuccess?: () => void;
   onWaitingForActions?: () => void;
   onError?: (error: Error) => void;
+  onFileDownloaded?: (filePath: string) => void;
 }
 
 // 选择器定义
@@ -207,7 +208,10 @@ async function getAvailablePort(): Promise<number> {
 }
 
 // 启动浏览器会话
-async function launchBrowserSession(email: string): Promise<BrowserSession> {
+async function launchBrowserSession(
+  email: string,
+  callbacks?: LoginCallbacks,
+): Promise<BrowserSession> {
   const configs = await loadConfigs();
   const port = await getAvailablePort();
   const profilePath = generateProfilePath(email);
@@ -224,7 +228,21 @@ async function launchBrowserSession(email: string): Promise<BrowserSession> {
   });
 
   const context = browser.contexts()[0];
+
   const page = await context.newPage();
+
+  // >>>>>>>>>>>>>> WORKAROUND TO MAKE chrome.downloads.onDeterminingFilename WORK
+  const session = await context.newCDPSession(page);
+  session.on('Browser.downloadProgress', (event) => {
+    if (event.state === 'completed' && event.filePath) {
+      callbacks?.onFileDownloaded?.(event.filePath);
+    }
+  });
+  await session.send('Browser.setDownloadBehavior', {
+    behavior: 'default',
+    eventsEnabled: true,
+  });
+  // <<<<<<<<<<<<<<
 
   const closeBrowser = async () => {
     try {
@@ -544,7 +562,7 @@ export async function loginWithGoogle(
   let closeMenuall = false;
   try {
     // 启动浏览器会话
-    const browserSession = await launchBrowserSession(accountInfo.email);
+    const browserSession = await launchBrowserSession(accountInfo.email, callbacks);
 
     performGoogleLogin(browserSession.page, accountInfo, callbacks)
       .then(() => {

@@ -17,6 +17,10 @@ export type RenderMessage = {
 
   //  根据账号 ID 置顶浏览器
   bringBrowserToFrontByAccountId(id: number): Promise<void>;
+
+  checkFileExist(filePath: string): Promise<boolean>;
+
+  showFileInFinder(filePath: string): Promise<void>;
 };
 
 export type MainMessage = {
@@ -29,4 +33,7 @@ export type MainMessage = {
 
   // 通知前端账号数据有变化
   accountDataChange(): void;
+
+  // downloa history change
+  downloadHistoryChange(): void;
 };

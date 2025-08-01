@@ -1,4 +1,5 @@
 export enum RouterNameEnum {
   SETTINGS = 'SETTINGS',
   ACCOUNTS = 'ACCOUNTS',
+  DOWNLOAD_HISTORY = 'DOWNLOAD_HISTORY',
 }

@@ -1,7 +1,7 @@
 {
   "name": "electron-playwright-auto-login-to-hedra",
   "description": "Electron + Playwright + Auto Login to Hedra",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "author": "CarlJin",
   "main": "packages/main/dist/index.cjs",

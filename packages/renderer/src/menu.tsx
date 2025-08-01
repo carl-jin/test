@@ -1,4 +1,4 @@
-import { HomeOutlined, SettingOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, HomeOutlined, SettingOutlined } from '@ant-design/icons';
 import { RouterNameEnum } from '@renderer/enums';
 import { MenuProps } from 'antd';
 
@@ -14,5 +14,10 @@ export default [
     key: RouterNameEnum.SETTINGS,
     icon: <SettingOutlined />,
     label: '设置',
+  },
+  {
+    key: RouterNameEnum.DOWNLOAD_HISTORY,
+    icon: <FolderOpenOutlined />,
+    label: '下载历史',
   },
 ] as MenuItem[];

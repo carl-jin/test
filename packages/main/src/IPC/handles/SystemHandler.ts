@@ -32,6 +32,14 @@ export function SystemHandler(IPC: IPCMain<RenderMessage, MainMessage>) {
   IPC.on('bringBrowserToFrontByAccountId', async (id) => {
     taskManager.bringBrowserToFrontByAccountId(id);
   });
+
+  IPC.on('checkFileExist', async (filePath) => {
+    return Promise.resolve(existsSync(filePath));
+  });
+
+  IPC.on('showFileInFinder', async (filePath) => {
+    shell.showItemInFolder(filePath);
+  });
 }
 
 /**

@@ -6,6 +6,7 @@ import { sample, uniqBy, isEqual } from 'lodash';
 import { BrowserSession, loginWithGoogle } from './LoginWIthGoogle';
 import { killChromeBrowserByWindowname } from '@main/helpers/browserKillHelper';
 import { bringToFront } from '@main/helpers/bringToFrontHelper';
+import { IPC } from '@main/IPC';
 
 let oldUpdate: Array<{
   id: number;
@@ -310,6 +311,14 @@ export class TaskManager {
           db.Account.updateAccount(account.id, {
             status: AccountStatusEnum.ERROR,
             logs: error instanceof Error ? error.message : String(error),
+          });
+        },
+        onFileDownloaded: (filePath) => {
+          db.DownloadHistory.add({
+            filePath,
+            accountEmail: account.email,
+          }).then(() => {
+            IPC.send('downloadHistoryChange');
           });
         },
       });
