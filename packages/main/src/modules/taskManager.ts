@@ -3,10 +3,12 @@ import { db } from '@main/db/DBServer';
 import { AccountStatusEnum } from '@main/db/types';
 import { Account } from '@main/db/entity';
 import { sample, uniqBy, isEqual } from 'lodash';
-import { BrowserSession, loginWithGoogle } from './LoginWIthGoogle';
+import { loginWithGoogle } from './LoginWIthGoogle';
 import { killChromeBrowserByWindowname } from '@main/helpers/browserKillHelper';
 import { bringToFront } from '@main/helpers/bringToFrontHelper';
 import { IPC } from '@main/IPC';
+import { BrowserSession } from '@main/modules/LoginCommon';
+import { loginWithEmail } from './LoginWithEmail';
 
 let oldUpdate: Array<{
   id: number;
@@ -22,6 +24,7 @@ export class TaskManager {
       browserSession?: BrowserSession;
       // 执行顺序
       order: number;
+      type: 'google' | 'email';
     }
   > = new Map();
 
@@ -33,7 +36,7 @@ export class TaskManager {
    * 启动任务执行
    * @param ids 账号ID数组
    */
-  public async run(ids: number[]) {
+  public async run(ids: number[], type: 'google' | 'email') {
     try {
       const accounts = await db.Account.getAccountsByIds(ids);
 
@@ -63,6 +66,7 @@ export class TaskManager {
           account,
           status: AccountStatusEnum.WAITING,
           order: getMaxOrder + 1,
+          type,
         });
       }
 
@@ -262,6 +266,8 @@ export class TaskManager {
       return;
     }
 
+    const type = accountInfo.type;
+
     // 更新状态为运行中
     this.accountMap.set(account.id, {
       ...accountInfo,
@@ -271,7 +277,7 @@ export class TaskManager {
     let closeBrowserFn = () => {};
 
     try {
-      const browserSession = await loginWithGoogle(account, {
+      const browserSession = await (type === 'google' ? loginWithGoogle : loginWithEmail)(account, {
         onWaitingForActions: () => {
           const accountInfo = this.accountMap.get(account.id);
           if (!accountInfo) {

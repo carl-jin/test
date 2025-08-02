@@ -13,7 +13,7 @@ export type RenderMessage = {
   browserPathExistAndExecutable(path: string): Promise<boolean>;
   (path: string): Promise<boolean>;
 
-  runAccountsByIDs(ids: number[]): Promise<void>;
+  runAccountsByIDs(ids: number[], type: 'google' | 'email'): Promise<void>;
 
   //  根据账号 ID 置顶浏览器
   bringBrowserToFrontByAccountId(id: number): Promise<void>;

@@ -20,9 +20,9 @@ import dayjs from 'dayjs';
 import AddAccountsModal from './AddAccountsModal';
 import { IPC } from '@renderer/IPC';
 import { AccountStatusEnum } from '@mainTypes';
+import { Icon } from '@iconify/react';
 
 const { Search } = Input;
-const { Title } = Typography;
 
 // 账户状态的颜色映射
 const statusColors = {
@@ -179,6 +179,31 @@ export default function Accounts() {
     };
   }, []);
 
+  function runAccountsByIDs(type: 'google' | 'email') {
+    setIsWaitToRun(true);
+    setTimeout(() => {
+      setIsWaitToRun(false);
+    }, 3000);
+
+    const accountIDs = selectedRowKeys.map(Number);
+    const account = data?.filter((account) => accountIDs.includes(account.id));
+    const isHaveWaitingActionsAccount = account?.some(
+      (account) => account.status === AccountStatusEnum.WAITING_FOR_ACTION,
+    );
+
+    if (isHaveWaitingActionsAccount) {
+      Modal.confirm({
+        title: '有账号正在等待操作, 重新执行将会覆盖操作，是否继续？',
+        onOk: () => {
+          IPC.send('runAccountsByIDs', selectedRowKeys.map(Number), type);
+        },
+      });
+      return;
+    } else {
+      IPC.send('runAccountsByIDs', accountIDs, type);
+    }
+  }
+
   // 搜索处理
   const handleSearch = (value: string) => {
     setSearchText(value);
@@ -278,37 +303,26 @@ export default function Accounts() {
 
             <Space>
               <Button
-                icon={<PlayCircleOutlined />}
+                icon={<Icon icon="flat-color-icons:google"></Icon>}
+                loading={isWaitToRun}
+                disabled={!settings?.runFlag || selectedRowKeys.length === 0}
+                onClick={() => {
+                  runAccountsByIDs('google');
+                }}
+              >
+                运行选中账号（Google 快捷登入）
+              </Button>
+
+              <Button
+                icon={<Icon icon="ic:round-mark-email-read" />}
                 type="primary"
                 loading={isWaitToRun}
                 disabled={!settings?.runFlag || selectedRowKeys.length === 0}
                 onClick={() => {
-                  setIsWaitToRun(true);
-                  setTimeout(() => {
-                    setIsWaitToRun(false);
-                  }, 3000);
-
-
-                  const accountIDs = selectedRowKeys.map(Number);
-                  const account = data?.filter((account) => accountIDs.includes(account.id));
-                  const isHaveWaitingActionsAccount = account?.some(
-                    (account) => account.status === AccountStatusEnum.WAITING_FOR_ACTION,
-                  );
-
-                  if (isHaveWaitingActionsAccount) {
-                    Modal.confirm({
-                      title: '有账号正在等待操作, 重新执行将会覆盖操作，是否继续？',
-                      onOk: () => {
-                        IPC.send('runAccountsByIDs', selectedRowKeys.map(Number));
-                      },
-                    });
-                    return;
-                  } else {
-                    IPC.send('runAccountsByIDs', accountIDs);
-                  }
+                  runAccountsByIDs('email');
                 }}
               >
-                运行选中账号
+                运行选中账号(邮箱验证码)
               </Button>
             </Space>
           </Flex>

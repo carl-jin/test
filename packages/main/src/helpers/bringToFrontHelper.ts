@@ -4,7 +4,7 @@ import { platform } from "os";
 import { app } from 'electron';
 import path from 'node:path';
 
-const isDev = !app.isPackaged;
+const isDev = app ? !app.isPackaged : false;
 
 // 处理 window 无法将 chrome 窗口置顶问题
 function bringToFront(page:Page, email: string) {

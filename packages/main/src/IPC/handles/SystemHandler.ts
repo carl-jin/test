@@ -25,8 +25,8 @@ export function SystemHandler(IPC: IPCMain<RenderMessage, MainMessage>) {
     return Promise.resolve(detectBrowserIsExecutable(path));
   });
 
-  IPC.on('runAccountsByIDs', async (ids) => {
-    taskManager.run(ids);
+  IPC.on('runAccountsByIDs', async (ids, type) => {
+    taskManager.run(ids, type);
   });
 
   IPC.on('bringBrowserToFrontByAccountId', async (id) => {
