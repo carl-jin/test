@@ -38,7 +38,6 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
-    "adm-zip": "^0.5.16",
     "antd": "^5.21.6",
     "archiver": "5.3.1",
     "autoprefixer": "^10.4.20",
@@ -94,6 +93,7 @@
     "sqlite3": "=5.1.6",
     "totp-generator": "=0.0.14",
     "typeorm": "^0.3.17",
-    "user-agents": "^1.1.346"
+    "user-agents": "^1.1.346",
+    "adm-zip": "^0.5.16"
   }
 }
