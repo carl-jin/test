@@ -10,6 +10,7 @@ import useThemeStore from '@renderer/store/theme';
 import InjectGlobalAntdApp from '@renderer/components/InjectGlobalAntdApp';
 import ZhCn from 'antd/locale/zh_CN';
 import { useBackgroundMessage } from '@renderer/hooks/useBackgroundMessage';
+import { IfNeedInstallVpnExt } from '@renderer/components/IfNeedInstallVpnExt';
 
 const { Content, Sider } = Layout;
 
@@ -57,6 +58,7 @@ export default function App() {
       locale={ZhCn}
     >
       <AntdApp>
+        <IfNeedInstallVpnExt />
         <InjectGlobalAntdApp />
         <Layout style={{ minHeight: '100vh' }}>
           <Layout>

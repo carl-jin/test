@@ -11,9 +11,6 @@ importers:
       electron-log:
         specifier: '=4.4.8'
         version: 4.4.8
-      electron-version-deployer-cli:
-        specifier: ^0.3.1
-        version: 0.3.1(@inquirer/prompts@1.2.3)(changelog-parser@3.0.1)(commander@10.0.1)(dompurify@3.1.6)(download@8.0.0)(electron@25.3.2)(esno@0.16.3)(jsdom@22.1.0)(log-symbols@4.1.0)(marked@5.1.2)(netlify-cli@15.11.0(@types/node@22.8.7)(encoding@0.1.13)(picomatch@4.0.2))(vite@4.4.7(@types/node@22.8.7)(less@4.2.0)(terser@5.31.6))(wrangler@3.72.3)
       get-port:
         specifier: ^5.1.1
         version: 5.1.1
@@ -78,6 +75,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.3
         version: 4.3.3(vite@4.4.7(@types/node@22.8.7)(less@4.2.0)(terser@5.31.6))
+      adm-zip:
+        specifier: ^0.5.16
+        version: 0.5.16
       antd:
         specifier: ^5.21.6
         version: 5.21.6(date-fns@3.6.0)(luxon@3.5.0)(moment@2.29.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -114,6 +114,9 @@ importers:
       electron-builder:
         specifier: 23.6.0
         version: 23.6.0
+      electron-version-deployer-cli:
+        specifier: ^0.4.3
+        version: 0.4.3(@inquirer/prompts@1.2.3)(changelog-parser@3.0.1)(commander@10.0.1)(dompurify@3.1.6)(download@8.0.0)(electron@25.3.2)(esno@0.16.3)(jsdom@22.1.0)(log-symbols@4.1.0)(marked@5.1.2)(netlify-cli@15.11.0(@types/node@22.8.7)(encoding@0.1.13)(picomatch@4.0.2))(vite@4.4.7(@types/node@22.8.7)(less@4.2.0)(terser@5.31.6))(wrangler@3.72.3)
       esno:
         specifier: ^0.16.3
         version: 0.16.3
@@ -1976,6 +1979,10 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  adm-zip@0.5.16:
+    resolution: {integrity: sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ==}
+    engines: {node: '>=12.0'}
+
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
@@ -3342,8 +3349,8 @@ packages:
   electron-to-chromium@1.5.13:
     resolution: {integrity: sha512-lbBcvtIJ4J6sS4tb5TLp1b4LyfCdMkwStzXPyAgVgTRAsep4bvrAGaBOP7ZJtQMNJpSQ9SqG4brWOroNaQtm7Q==}
 
-  electron-version-deployer-cli@0.3.1:
-    resolution: {integrity: sha512-47ExL+G8Ttc8M7w5f66Cv/aVld7xkglWAlbPxBcKSdBsyhrOhdDdvrD0VWk05FOKxNX4ruk6M+XgUIoJhtTC7w==}
+  electron-version-deployer-cli@0.4.3:
+    resolution: {integrity: sha512-nNzylsR31spd94pod9EVLPOsmVvkt6dypKzS6+HbWqiZF+ynP5xxZpfqD6r9TQu+SejxkhEQjR0R+hcnXLVLPQ==}
     hasBin: true
     peerDependencies:
       '@inquirer/prompts': ^1.2.3
@@ -10172,6 +10179,8 @@ snapshots:
 
   acorn@8.12.1: {}
 
+  adm-zip@0.5.16: {}
+
   agent-base@6.0.2(supports-color@9.4.0):
     dependencies:
       debug: 4.3.7(supports-color@9.4.0)
@@ -11828,7 +11837,7 @@ snapshots:
 
   electron-to-chromium@1.5.13: {}
 
-  electron-version-deployer-cli@0.3.1(@inquirer/prompts@1.2.3)(changelog-parser@3.0.1)(commander@10.0.1)(dompurify@3.1.6)(download@8.0.0)(electron@25.3.2)(esno@0.16.3)(jsdom@22.1.0)(log-symbols@4.1.0)(marked@5.1.2)(netlify-cli@15.11.0(@types/node@22.8.7)(encoding@0.1.13)(picomatch@4.0.2))(vite@4.4.7(@types/node@22.8.7)(less@4.2.0)(terser@5.31.6))(wrangler@3.72.3):
+  electron-version-deployer-cli@0.4.3(@inquirer/prompts@1.2.3)(changelog-parser@3.0.1)(commander@10.0.1)(dompurify@3.1.6)(download@8.0.0)(electron@25.3.2)(esno@0.16.3)(jsdom@22.1.0)(log-symbols@4.1.0)(marked@5.1.2)(netlify-cli@15.11.0(@types/node@22.8.7)(encoding@0.1.13)(picomatch@4.0.2))(vite@4.4.7(@types/node@22.8.7)(less@4.2.0)(terser@5.31.6))(wrangler@3.72.3):
     dependencies:
       '@inquirer/prompts': 1.2.3
       archiver: 5.3.1

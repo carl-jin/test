@@ -21,6 +21,10 @@ export type RenderMessage = {
   checkFileExist(filePath: string): Promise<boolean>;
 
   showFileInFinder(filePath: string): Promise<void>;
+
+  installVpnExtIfNeeded(): Promise<void>;
+
+  checkIfNeedInstallVpnExt(): Promise<boolean>;
 };
 
 export type MainMessage = {

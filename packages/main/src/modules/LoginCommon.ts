@@ -9,6 +9,7 @@ import { exec, ChildProcess } from 'child_process';
 import getPort from 'get-port';
 import { db } from '@main/db/DBServer';
 import { app } from 'electron';
+import { existsSync } from 'fs';
 
 // 账户信息接口
 export interface AccountInfo {
@@ -142,6 +143,11 @@ export function launchBrowserProcess(
   email: string,
 ): ChildProcess {
   const windowPosition = calculateWindowPosition(port, email);
+  let extPaths: string[] = [];
+
+  if (ifVpnExtExist()) {
+    extPaths.push(path.join(app.getPath('userData'), 'ext', 'vpnExtension'));
+  }
 
   const launchArgs = [
     `--user-data-dir="${path.dirname(profilePath)}"`,
@@ -159,6 +165,11 @@ export function launchBrowserProcess(
     `--window-size=1080,720`,
     `--lang=en-US`,
     `--window-name=${btoa(email).replace(/=/g, '')}`,
+
+    ...(extPaths.length > 0
+      ? ['--disable-extensions-except=' + extPaths.map((str) => `"${str}"`).join(',')]
+      : []),
+    ...(extPaths.length > 0 ? ['--load-extension=' + extPaths.map((str) => `"${str}"`).join(',')] : []),
   ];
 
   const executablePath = configs.executablePath;
@@ -208,6 +219,24 @@ export async function launchBrowserSession(
   const context = browser.contexts()[0];
 
   const page = await context.newPage();
+
+  // 链接 VPN
+  {
+    if (ifVpnExtExist()) {
+      await page.goto('chrome-extension://omghfjlpggmjjaagoclmmobgdodcjboh/popup/popup.html');
+      // 等待页面加载完成
+      await page.waitForLoadState('networkidle');
+
+      if (await page.$(`input[value="Accept"]`)) {
+        await page.click(`input[value="Accept"]`);
+      }
+
+      await page.waitForSelector("//*[contains(text(),'Start VPN')]");
+      await page.click("//*[contains(text(),'Start VPN')]");
+
+      await page.waitForSelector('text=Your Privacy is protected');
+    }
+  }
 
   // >>>>>>>>>>>>>> WORKAROUND TO MAKE chrome.downloads.onDeterminingFilename WORK
   const session = await context.newCDPSession(page);
@@ -280,4 +309,12 @@ export async function removeHighlightBorder(page: Page) {
   } catch (error) {
     // 如果页面跳转的话，这个可能会报错
   }
+}
+
+function ifVpnExtExist() {
+  const vpnExtPath = path.join(app.getPath('userData'), 'ext', 'vpnExtension');
+  if (existsSync(vpnExtPath)) {
+    return true;
+  }
+  return false;
 }

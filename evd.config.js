@@ -1,5 +1,6 @@
 import { defineEVDConfig } from 'electron-version-deployer-cli';
 import { evdRemoteUrl } from './packages/main/src/const';
+
 export default defineEVDConfig({
   compileCommand: 'evd:prepare',
   changelogsPath: 'CHANGELOG.md',
@@ -14,6 +15,7 @@ export default defineEVDConfig({
     token: `JnVMe6WzXThRx2veoHqtqIUV-oM6Jwm-FlPQElfr`,
     projectName: `evdtest`,
   },
+  extraFolders: ['buildResources/ext'],
   prebuiltConfig: {
     sqlite3: {
       files: [

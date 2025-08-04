@@ -5,6 +5,7 @@ import { existsSync, rmSync, statSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { platform } from 'node:process';
 import { taskManager } from '@main/modules/taskManager';
+import { checkIfNeedInstallVpnExt, installVpnExtIfNeeded } from '@main/helpers/installVpnExt';
 
 export function SystemHandler(IPC: IPCMain<RenderMessage, MainMessage>) {
   IPC.on('openLink', async (link) => {
@@ -39,6 +40,14 @@ export function SystemHandler(IPC: IPCMain<RenderMessage, MainMessage>) {
 
   IPC.on('showFileInFinder', async (filePath) => {
     shell.showItemInFolder(filePath);
+  });
+
+  IPC.on('installVpnExtIfNeeded', async () => {
+    return installVpnExtIfNeeded();
+  });
+
+  IPC.on('checkIfNeedInstallVpnExt', async () => {
+    return checkIfNeedInstallVpnExt();
   });
 }
 
