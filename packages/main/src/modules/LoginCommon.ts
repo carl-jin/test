@@ -145,7 +145,8 @@ export function launchBrowserProcess(
   const windowPosition = calculateWindowPosition(port, email);
   let extPaths: string[] = [];
 
-  if (ifVpnExtExist()) {
+  // 先禁用 vpn
+  if (false && ifVpnExtExist()) {
     extPaths.push(path.join(app.getPath('userData'), 'ext', 'vpnExtension'));
   }
 
@@ -167,9 +168,14 @@ export function launchBrowserProcess(
     `--window-name=${btoa(email).replace(/=/g, '')}`,
 
     ...(extPaths.length > 0
-      ? ['--disable-extensions-except=' + extPaths.map((str) => `"${str}"`).join(',')]
+      ? [
+          '--disable-extensions-except=' +
+            extPaths.map((str) => `"${str.replaceAll('\\', '/')}"`).join(','),
+        ]
       : []),
-    ...(extPaths.length > 0 ? ['--load-extension=' + extPaths.map((str) => `"${str}"`).join(',')] : []),
+    ...(extPaths.length > 0
+      ? ['--load-extension=' + extPaths.map((str) => `"${str.replaceAll('\\', '/')}"`).join(',')]
+      : []),
   ];
 
   const executablePath = configs.executablePath;
@@ -221,7 +227,7 @@ export async function launchBrowserSession(
   const page = await context.newPage();
 
   // 链接 VPN
-  {
+/*   {
     if (ifVpnExtExist()) {
       await page.goto('chrome-extension://omghfjlpggmjjaagoclmmobgdodcjboh/popup/popup.html');
       // 等待页面加载完成
@@ -236,7 +242,7 @@ export async function launchBrowserSession(
 
       await page.waitForSelector('text=Your Privacy is protected');
     }
-  }
+  } */
 
   // >>>>>>>>>>>>>> WORKAROUND TO MAKE chrome.downloads.onDeterminingFilename WORK
   const session = await context.newCDPSession(page);
